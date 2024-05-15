@@ -15,9 +15,10 @@ class SleepData(BaseModel):
     Physical_Activity_Level: int
     Stress_Level: int
     BMI_Category: str
-    Blood_Pressure: str
     Heart_Rate: int
     Daily_Steps: int
+    systole: int
+    diastole: int
 
 # Memuat model prediksi dari file pickle
 model = joblib.load("SleepHealth_pipeline.pkl")
@@ -27,11 +28,11 @@ model = joblib.load("SleepHealth_pipeline.pkl")
 async def predict_sleep_disorder(data: SleepData):
     # Ubah data masukan menjadi format yang diperlukan oleh model
     input_data = [[ data.Gender, data.Age, data.Occupation, data.Sleep_Duration, data.Quality_of_Sleep, data.Physical_Activity_Level, data.Stress_Level,
-    data.BMI_Category, data.Blood_Pressure, data.Heart_Rate, data.Daily_Steps]]
+    data.BMI_Category, data.Heart_Rate, data.Daily_Steps, data.systole, data.diastole]]
     
     # Konversi menjadi DataFrame
     input_data_df = pd.DataFrame(input_data, columns=['Gender','Age' ,'Occupation', 'Sleep Duration', 'Quality of Sleep', 'Physical Activity Level',
-                                                      'Stress Level', 'BMI Category', 'Blood Pressure', 'Heart Rate', 'Daily Steps'])
+                                                      'Stress Level', 'BMI Category', 'Heart Rate', 'Daily Steps', 'systole', 'diastole'])
 
     # Lakukan prediksi dengan model
     prediction = model.predict(input_data_df)
